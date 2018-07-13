@@ -21,6 +21,8 @@ public class Computer {
     @NotNull
     private String operatingSystem;
 
+
+
     public Computer() {
 
     }

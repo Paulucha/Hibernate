@@ -1,7 +1,10 @@
 package com.infoshareacademy.web;
 
+import com.infoshareacademy.dao.ComputerDao;
 import com.infoshareacademy.dao.StudentDao;
+import com.infoshareacademy.model.Computer;
 import com.infoshareacademy.model.Student;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -13,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +24,8 @@ import org.slf4j.LoggerFactory;
 public class StudentServlet extends HttpServlet {
 
     private Logger LOG = LoggerFactory.getLogger(StudentServlet.class);
-
+    @Inject
+    private ComputerDao computerDao;
     @Inject
     private StudentDao studentDao;
 
@@ -30,15 +35,15 @@ public class StudentServlet extends HttpServlet {
 
         // Test data
         // Students
-        studentDao.save(new Student("Michal", "nazwiskomiachala", LocalDate.of(1991,05,06)));
-        studentDao.save(new Student("Marek", "nazwoskoMarrka", LocalDate.of(1695,05,9)));
+        studentDao.save(new Student("Michal", "nazwiskomiachala", LocalDate.of(1991, 05, 6)));
+        studentDao.save(new Student("Marek", "nazwoskoMarrka", LocalDate.of(1695, 05, 9)));
 
         LOG.info("System time zone is: {}", ZoneId.systemDefault());
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-        throws IOException {
+            throws IOException {
 
         final String action = req.getParameter("action");
         LOG.info("Requested action: {}", action);
@@ -61,7 +66,7 @@ public class StudentServlet extends HttpServlet {
     }
 
     private void updateStudent(HttpServletRequest req, HttpServletResponse resp)
-        throws IOException {
+            throws IOException {
         final Long id = Long.parseLong(req.getParameter("id"));
         LOG.info("Updating Student with id = {}", id);
 
@@ -75,6 +80,7 @@ public class StudentServlet extends HttpServlet {
             existingStudent.setName(req.getParameter("name"));
             existingStudent.setSurname(req.getParameter("surname"));
             existingStudent.setDateOfBirth(LocalDate.parse(req.getParameter("date of birth")));
+            existingStudent.setComputer(computerDao.findById(Long.parseLong(req.getParameter("idkomp"))));
 
             studentDao.update(existingStudent);
             LOG.info("Student object updated: {}", existingStudent);
@@ -85,13 +91,12 @@ public class StudentServlet extends HttpServlet {
     }
 
     private void addStudent(HttpServletRequest req, HttpServletResponse resp)
-        throws IOException {
+            throws IOException {
 
         final Student p = new Student();
         p.setName(req.getParameter("name"));
         p.setSurname(req.getParameter("surname"));
         p.setDateOfBirth(LocalDate.parse(req.getParameter("Date_of_Birth")));
-
 
 
         studentDao.save(p);
@@ -119,4 +124,3 @@ public class StudentServlet extends HttpServlet {
         }
     }
 }
-
