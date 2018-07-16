@@ -3,6 +3,7 @@ package com.infoshareacademy.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -37,6 +38,21 @@ public class Student {
     @JoinColumn(name = "adress_id")
     private Adress adress;
 
+    @ManyToMany
+    @JoinTable(name = "STUDENTS_TO_COURSES",
+            joinColumns = @JoinColumn(name = "STUDENT_ID", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "COURSE_ID", referencedColumnName = "id"))
+    private List<Course> courses;
+
+    public Student(String name, String surname, LocalDate dateOfBirth, Computer computer, Adress adress, List<Course> courses) {
+        this.name = name;
+        this.surname = surname;
+        this.dateOfBirth = dateOfBirth;
+        this.computer = computer;
+        this.adress = adress;
+        this.courses = courses;
+    }
+
     public Student(String name, String surname, LocalDate dateOfBirth, Computer computer, Adress adress) {
         this.name = name;
         this.surname = surname;
@@ -52,6 +68,9 @@ public class Student {
         this.computer = computer;
     }
 
+    public Student() {
+
+    }
 
     public Computer getComputer() {
         return computer;
@@ -69,7 +88,7 @@ public class Student {
         this.adress = adress;
     }
 
-    public Student() {
+    public Student(String michal, String nazwiskomiachala, LocalDate of, Object o, Adress a3, List<Course> kurs1, Course kurs2) {
 
     }
 

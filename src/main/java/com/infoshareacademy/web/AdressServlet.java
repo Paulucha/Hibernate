@@ -12,10 +12,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-
+@Transactional
 @WebServlet(urlPatterns = "/adress")
 public class AdressServlet extends HttpServlet {
 
@@ -24,6 +25,7 @@ public class AdressServlet extends HttpServlet {
 
     @Inject
     private AdressDao adressDao;
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

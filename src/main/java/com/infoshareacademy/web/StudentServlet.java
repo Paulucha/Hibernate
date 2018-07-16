@@ -2,14 +2,17 @@ package com.infoshareacademy.web;
 
 import com.infoshareacademy.dao.AdressDao;
 import com.infoshareacademy.dao.ComputerDao;
+import com.infoshareacademy.dao.CourseDao;
 import com.infoshareacademy.dao.StudentDao;
 import com.infoshareacademy.model.Adress;
 import com.infoshareacademy.model.Computer;
+import com.infoshareacademy.model.Course;
 import com.infoshareacademy.model.Student;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
@@ -18,6 +21,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,24 +36,37 @@ public class StudentServlet extends HttpServlet {
     private StudentDao studentDao;
     @Inject
     private AdressDao adressDao;
-
+@Inject
+private CourseDao courseDao;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
+
+        // Courses
+        Course kurs1 = new Course("JAVA");
+        courseDao.save(kurs1);
+        Course kurs2 = new Course("FOTO");
+        Course kurs3 = new Course("TANIEC");
+        courseDao.save(kurs2);
+        courseDao.save(kurs3);
+
+        // Computers
         computerDao.save(new Computer("Komputer 3", "WIN"));
         computerDao.save(new Computer("Komputer 4", "LINUX"));
+
+        // Adressses
         Adress a3 = new Adress("sfgrg", "gdfg");
         adressDao.save(new Adress("Ganska", "Kartuzy"));
         Adress a2 = new Adress("Kartuska", "Gdansk");
         adressDao.save(a2);
         adressDao.save(a3);
-        // Test data
+
         // Students
-        studentDao.save(new Student("Michal", "nazwiskomiachala", LocalDate.of(1991, 05, 6), null, a3));
-        studentDao.save(new Student("Marek", "nazwoskoMarrka", LocalDate.of(1695, 05, 9), null, a2));
-        studentDao.save(new Student("Ania", "Kowalska", LocalDate.of(1995, 06, 12), null, a2));
+        studentDao.save(new Student("Michal", "nazwiskomiachala", LocalDate.of(1991, 05, 6), null, a3, Collections.singletonList(kurs1)));
+        studentDao.save(new Student("Marek", "nazwoskoMarrka", LocalDate.of(1695, 05, 9), null, a2, Collections.singletonList(kurs2)));
+        studentDao.save(new Student("Ania", "Kowalska", LocalDate.of(1995, 06, 12), null, a2, Collections.singletonList(kurs1)));
 
         LOG.info("System time zone is: {}", ZoneId.systemDefault());
     }
