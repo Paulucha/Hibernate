@@ -41,6 +41,14 @@ public class CourseDao {
 
         return query.getResultList();
     }
+//    public List<CourseSummary> getCoursesDetails(){
+//
+//        List<Course> courses = findAll();
+//        return  courses.stream().map(c -> {
+//            List<String> attenders = c.getStudents()
+//            CourseSummary Summary = new CourseSummary(c.getName())
+//        })
+//    }
 }
 
 

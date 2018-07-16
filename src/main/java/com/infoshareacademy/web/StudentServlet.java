@@ -36,8 +36,8 @@ public class StudentServlet extends HttpServlet {
     private StudentDao studentDao;
     @Inject
     private AdressDao adressDao;
-@Inject
-private CourseDao courseDao;
+    @Inject
+    private CourseDao courseDao;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -64,6 +64,8 @@ private CourseDao courseDao;
         adressDao.save(a3);
 
         // Students
+        Student s1 = new Student("Zdzich", "nazwisko", LocalDate.of(1991, 05, 6), null, a3);
+//        s1.setCourses(kurs1);
         studentDao.save(new Student("Michal", "nazwiskomiachala", LocalDate.of(1991, 05, 6), null, a3, Collections.singletonList(kurs1)));
         studentDao.save(new Student("Marek", "nazwoskoMarrka", LocalDate.of(1695, 05, 9), null, a2, Collections.singletonList(kurs2)));
         studentDao.save(new Student("Ania", "Kowalska", LocalDate.of(1995, 06, 12), null, a2, Collections.singletonList(kurs1)));
@@ -90,11 +92,22 @@ private CourseDao courseDao;
             deleteStudent(req, resp);
         } else if (action.equals("update")) {
             updateStudent(req, resp);
+        }else if (action.equals("findStudentsBornAfter")){
+            LocalDate date = LocalDate.parse(req.getParameter("date"));
+            final List<Student> existingStudent = studentDao.findStudentsBornAfter(date);LOG.info("Found {} objects", existingStudent.size());
+            for (Student p : existingStudent) {
+                resp.getWriter().write(p.toString() + "\n");
+            }
         } else {
             resp.getWriter().write("Unknown action.");
         }
     }
-
+//private void findStudentsBornAfter (HttpServletRequest req, HttpServletResponse resp) throws IOException {
+//
+//
+//    final Student existingStudent = studentDao.findStudentsBornAfter(date);
+//
+//}
     private void updateStudent(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         final Long id = Long.parseLong(req.getParameter("id"));
@@ -162,4 +175,5 @@ private CourseDao courseDao;
             resp.getWriter().write(p.toString() + "\n");
         }
     }
+
 }

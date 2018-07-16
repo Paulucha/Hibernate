@@ -1,6 +1,8 @@
 package com.infoshareacademy.dao;
 
 import com.infoshareacademy.model.Student;
+
+import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -37,6 +39,14 @@ public class StudentDao {
         final Query query = entityManager.createQuery("SELECT s FROM Student s");
 
         return query.getResultList();
+    }
+
+
+    public List<Student> findStudentsBornAfter(LocalDate date) {
+        final Query query = entityManager
+                .createQuery("SELECT s FROM STUDENTS s WHERE s.dateOfBirth >= :date");
+        query.setParameter("date", date);
+        return (List<Student>)query.getResultList();
     }
 
 }

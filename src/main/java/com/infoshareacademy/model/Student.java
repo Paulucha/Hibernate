@@ -40,8 +40,8 @@ public class Student {
 
     @ManyToMany
     @JoinTable(name = "STUDENTS_TO_COURSES",
-            joinColumns = @JoinColumn(name = "STUDENT_ID", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "COURSE_ID", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "student_ID", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "course_ID", referencedColumnName = "id"))
     private List<Course> courses;
 
     public Student(String name, String surname, LocalDate dateOfBirth, Computer computer, Adress adress, List<Course> courses) {
@@ -70,6 +70,14 @@ public class Student {
 
     public Student() {
 
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
     }
 
     public Computer getComputer() {
@@ -138,7 +146,8 @@ public class Student {
                 ", surname='" + surname + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", computer=" + computer +
-                ", adress=" + adress.getStreet()+ " " + adress.getCity() +
+                ", adress=" + adress.getStreet() + " " + adress.getCity() +
+
                 '}';
     }
 }
