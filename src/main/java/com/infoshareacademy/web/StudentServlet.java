@@ -1,7 +1,9 @@
 package com.infoshareacademy.web;
 
+import com.infoshareacademy.dao.AdressDao;
 import com.infoshareacademy.dao.ComputerDao;
 import com.infoshareacademy.dao.StudentDao;
+import com.infoshareacademy.model.Adress;
 import com.infoshareacademy.model.Computer;
 import com.infoshareacademy.model.Student;
 
@@ -28,15 +30,26 @@ public class StudentServlet extends HttpServlet {
     private ComputerDao computerDao;
     @Inject
     private StudentDao studentDao;
+    @Inject
+    private AdressDao adressDao;
+
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
+        computerDao.save(new Computer("Komputer 3", "WIN"));
+        computerDao.save(new Computer("Komputer 4", "LINUX"));
+        Adress a3 = new Adress("sfgrg", "gdfg");
+        adressDao.save(new Adress("Ganska", "Kartuzy"));
+        Adress a2 = new Adress("Kartuska", "Gdansk");
+        adressDao.save(a2);
+        adressDao.save(a3);
         // Test data
         // Students
-        studentDao.save(new Student("Michal", "nazwiskomiachala", LocalDate.of(1991, 05, 6)));
-        studentDao.save(new Student("Marek", "nazwoskoMarrka", LocalDate.of(1695, 05, 9)));
+        studentDao.save(new Student("Michal", "nazwiskomiachala", LocalDate.of(1991, 05, 6), null, a3));
+        studentDao.save(new Student("Marek", "nazwoskoMarrka", LocalDate.of(1695, 05, 9), null, a2));
+        studentDao.save(new Student("Ania", "Kowalska", LocalDate.of(1995, 06, 12), null, a2));
 
         LOG.info("System time zone is: {}", ZoneId.systemDefault());
     }
@@ -93,12 +106,21 @@ public class StudentServlet extends HttpServlet {
     private void addStudent(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
 
+        String computerIdStr = req.getParameter("computerId");
+        Long computerId = Long.valueOf(computerIdStr);
+        final Computer c = computerDao.findById(computerId);
+
+        String addressIdStr = req.getParameter("addressId");
+        Long addressId = Long.valueOf(addressIdStr);
+        final Adress a = adressDao.findById(addressId);
+
+
         final Student p = new Student();
         p.setName(req.getParameter("name"));
         p.setSurname(req.getParameter("surname"));
-        p.setDateOfBirth(LocalDate.parse(req.getParameter("Date_of_Birth")));
-
-
+        p.setDateOfBirth(LocalDate.parse(req.getParameter("date")));
+        p.setComputer(computerDao.findById(Long.parseLong(req.getParameter("idkomp"))));
+        p.setAdress(a);
         studentDao.save(p);
         LOG.info("Saved a new Student object: {}", p);
 

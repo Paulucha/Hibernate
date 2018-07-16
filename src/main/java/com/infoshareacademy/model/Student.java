@@ -3,9 +3,11 @@ package com.infoshareacademy.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "STUDENTS")
+
 public class Student {
 
     @Id
@@ -22,13 +24,26 @@ public class Student {
     @NotNull
     private String surname;
 
-    @Column(name = "Date_of_Birth")
+    @Column(name = "date")
     @NotNull
     private LocalDate dateOfBirth;
 
     @OneToOne
     @JoinColumn(name = "computer_id", unique = true)
     private Computer computer;
+
+
+    @ManyToOne
+    @JoinColumn(name = "adress_id")
+    private Adress adress;
+
+    public Student(String name, String surname, LocalDate dateOfBirth, Computer computer, Adress adress) {
+        this.name = name;
+        this.surname = surname;
+        this.dateOfBirth = dateOfBirth;
+        this.computer = computer;
+        this.adress = adress;
+    }
 
     public Student(String name, String surname, LocalDate dateOfBirth, Computer computer) {
         this.name = name;
@@ -37,12 +52,21 @@ public class Student {
         this.computer = computer;
     }
 
+
     public Computer getComputer() {
         return computer;
     }
 
     public void setComputer(Computer computer) {
         this.computer = computer;
+    }
+
+    public Adress getAdress() {
+        return adress;
+    }
+
+    public void setAdress(Adress adress) {
+        this.adress = adress;
     }
 
     public Student() {
@@ -95,8 +119,8 @@ public class Student {
                 ", surname='" + surname + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", computer=" + computer +
+                ", adress=" + adress.getStreet()+ " " + adress.getCity() +
                 '}';
     }
-
 }
 

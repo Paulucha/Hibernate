@@ -24,16 +24,16 @@ public class ComputerServlet extends HttpServlet {
     @Inject
     private ComputerDao computerDao;
 
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-
-        // Test data
-        // Students
-        computerDao.save(new Computer("Komputer 3", "WIN"));
-        computerDao.save(new Computer("Komputer 4", "LINUX"));
-        LOG.info("System time zone is: {}", ZoneId.systemDefault());
-    }
+//    @Override
+//    public void init(ServletConfig config) throws ServletException {
+//        super.init(config);
+//
+//        // Test data
+//        // Students
+//        computerDao.save(new Computer("Komputer 3", "WIN"));
+//        computerDao.save(new Computer("Komputer 4", "LINUX"));
+//        LOG.info("System time zone is: {}", ZoneId.systemDefault());
+//    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
